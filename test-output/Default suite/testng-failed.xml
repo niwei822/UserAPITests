@@ -5,7 +5,7 @@
     <classes>
       <class name="UserAPIGetTest">
         <methods>
-          <include name="testWithBlankId"/>
+          <include name="testWithCreateUser"/>
         </methods>
       </class> <!-- UserAPIGetTest -->
     </classes>

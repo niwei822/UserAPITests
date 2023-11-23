@@ -17,6 +17,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+
+
+
 public class QaHttpUtil {
 	
 	public static HttpResponse sendAndReceiveGetMessage(String url) throws IOException, ClientProtocolException {
@@ -26,8 +29,11 @@ public class QaHttpUtil {
 		return response;
 	}
 	
-	public static HttpResponse sendAndReceivePostMessage(String url, List<NameValuePair> params) throws IOException, ClientProtocolException {
+	public static HttpResponse sendAndReceivePostMessage(String url, List<NameValuePair> params, String accessToken) throws IOException, ClientProtocolException {
 		HttpPost request = new HttpPost(url);
+		//final String ACCESS_TOKEN = "62e04d19ecbbc59ff42afe82f21020b617beabe513dede11bad5c41edd4161fb";
+		// Add access token to headers
+		request.addHeader("Authorization", "Bearer " + accessToken);;
 		
 		request.setEntity(new UrlEncodedFormEntity(params));
 		//request.setEntity(entity);

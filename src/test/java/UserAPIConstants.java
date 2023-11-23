@@ -1,7 +1,8 @@
 
-public interface UserAPIConstant {
+public interface UserAPIConstants {
 	
-	static final String base_URL = "https://reqres.in/api/users";
+	static final String base_URL = "https://gorest.co.in/public/v2/users";
+	static final String ACCESS_TOKEN = "62e04d19ecbbc59ff42afe82f21020b617beabe513dede11bad5c41edd4161fb";
 	static final int HTTP_CODE_200 = 200;
 	static final int HTTP_CODE_201 = 201;
 	static final int HTTP_CODE_204 = 204;

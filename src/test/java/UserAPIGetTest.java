@@ -8,17 +8,29 @@ import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.message.BasicNameValuePair;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import core.BaseTest;
 import core.QaHttpUtil;
 import core.QaHttpValidator;
 
-public class UserAPIGetTest extends BaseTest implements UserAPIConstant {
+public class UserAPIGetTest extends BaseTest implements UserAPIConstants {
 
-	@Test
-	public void testWithCorrectUserId() throws ParseException, IOException {
-		String url = base_URL + "/2";
+	@DataProvider(name = "dp1")
+	public Object[][] createData() {
+		String[][] ids = { 
+				{ "5711480", "Avani Kaniyar"}, 
+				{ "5713354", "Siddhi Khan"}, 
+				{ "5711487", "Rudra Arora"}, 
+				{ "5711486", "Chinmayanand Pillai"}
+				};
+		return ids;
+	}
+
+	@Test(dataProvider="dp1")
+	public void testWithCorrectUserId(String userId, String name) throws ParseException, IOException {
+		String url = base_URL + "/" + userId;
 		HttpResponse response = QaHttpUtil.sendAndReceiveGetMessage(url);
 
 		System.out.println(response.getStatusLine().getStatusCode());
@@ -27,7 +39,7 @@ public class UserAPIGetTest extends BaseTest implements UserAPIConstant {
 
 		System.out.println(responseMsg);
 		QaHttpValidator.performBasicHttpValidation(response, HTTP_CODE_200, HTTP_STATUS_MESSAGE_OK);
-		Assert.assertTrue(responseMsg.contains("Janet"));
+		Assert.assertTrue(responseMsg.contains(name));
 	}
 
 	@Test
@@ -74,14 +86,19 @@ public class UserAPIGetTest extends BaseTest implements UserAPIConstant {
 
 	@Test
 	public void testWithCreateUser() throws ParseException, IOException {
+		// Create URI with base URL
 		String url = base_URL;
+        
 		// Create a list to store POST parameters
 		List<NameValuePair> params = new ArrayList<>();
 		params.add(new BasicNameValuePair("name", "Bob"));
-		params.add(new BasicNameValuePair("job", "engineer"));
+		params.add(new BasicNameValuePair("email", "bob@mail.com"));
+		params.add(new BasicNameValuePair("gender", "male"));
+		params.add(new BasicNameValuePair("status", "active"));
 
 		// Encode the parameters and set them in the request entity
-		HttpResponse response = QaHttpUtil.sendAndReceivePostMessage(url, params);
+		HttpResponse response = QaHttpUtil.sendAndReceivePostMessage(url, params, ACCESS_TOKEN);
+		//System.out.println(ACCESS_TOKEN);
 
 		System.out.println(response.getStatusLine().getStatusCode());
 		System.out.println(response.getStatusLine().getReasonPhrase());
