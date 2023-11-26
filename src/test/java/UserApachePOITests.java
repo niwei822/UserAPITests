@@ -1,12 +1,14 @@
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -18,15 +20,22 @@ import core.QaHttpValidator;
 public class UserApachePOITests extends BaseTest implements UserAPIConstants {
 	@DataProvider(name = "dp1")
     public Object[][] createData() {
-        String[][] ids = getExcelData("customer-api-data.xlsx", "Sheet1", "successfulids");
+        String[][] ids = getExcelData("customer-api-data (4).xlsx", "Sheet1");
+        for (String[] row : ids) {
+            System.out.println(Arrays.toString(row));
+        }
         return ids;
     }
 
     @DataProvider(name = "dp2")
     public Object[][] createData2() {
-        String[][] ids = getExcelData("customer-api-data.xlsx", "Sheet1", "lockedids");
+    	String[][] ids = getExcelData("customer-api-data (4).xlsx", "Sheet2");
+    	for (String[] row : ids) {
+            System.out.println(Arrays.toString(row));
+        }
         return ids;
     }
+   
     
     @Test(dataProvider = "dp1")
     public void testWithCorrectUserId(String userId, String name) throws ParseException, IOException {
@@ -56,33 +65,36 @@ public class UserApachePOITests extends BaseTest implements UserAPIConstants {
         QaHttpValidator.performBasicHttpValidation(response, HTTP_CODE_404, HTTP_STATUS_MESSAGE_NOT_FOUND);
     }
     
-    private String[][] getExcelData(String filePath, String sheetName, String tableName) {
+    private String[][] getExcelData(String filePath, String sheetName) {
         String[][] tabArray = null;
-        try (Workbook workbook = WorkbookFactory.create(new FileInputStream(filePath))) {
+        try (Workbook workbook = new XSSFWorkbook(new FileInputStream(filePath))) {
             Sheet sheet = workbook.getSheet(sheetName);
 
-            // Find the table start cell
-            Cell tableStart = sheet.findCell(tableName);
-            int startRow = tableStart.getRow();
-            int startCol = tableStart.getColumn();
+         // Find the table start cell (assuming there is no specific table name)
+            int startRow = sheet.getFirstRowNum() + 1;
+            int startCol = sheet.getRow(startRow).getFirstCellNum();
 
             // Find the table end cell
-            Cell tableEnd = sheet.findCell(tableName, startCol + 1, startRow + 1, 100, 64000, false);
-
-            int endRow = tableEnd.getRow();
-            int endCol = tableEnd.getColumn();
+            int endRow = sheet.getLastRowNum() + 1; // Adding 1 to include the last row
+            int endCol = sheet.getRow(startRow).getLastCellNum();
 
             System.out.println("startRow=" + startRow + ", endRow=" + endRow + ", " +
                     "startCol=" + startCol + ", endCol=" + endCol);
 
-            tabArray = new String[endRow - startRow - 1][endCol - startCol - 1];
-
-            int ci = 0;
-
-            for (int i = startRow + 1; i < endRow; i++, ci++) {
-                int cj = 0;
-                for (int j = startCol + 1; j < endCol; j++, cj++) {
-                    tabArray[ci][cj] = sheet.getRow(i).getCell(j).getStringCellValue();
+         // Read data into a 2D array
+            tabArray = new String[endRow - startRow][endCol - startCol];
+            for (int i = startRow; i < endRow; i++) {
+                for (int j = startCol; j < endCol; j++) {
+                    Cell cell = sheet.getRow(i).getCell(j);
+                    if (cell != null) {
+                        if (cell.getCellType() == CellType.NUMERIC) {
+                            tabArray[i - startRow][j - startCol] = String.valueOf((int) cell.getNumericCellValue());
+                        } else {
+                            tabArray[i - startRow][j - startCol] = cell.getStringCellValue();
+                        }
+                    } else {
+                        tabArray[i - startRow][j - startCol] = "";
+                    }
                 }
             }
         } catch (Exception e) {
@@ -90,6 +102,5 @@ public class UserApachePOITests extends BaseTest implements UserAPIConstants {
         }
 
         return tabArray;
-    }
 }
-
+}
