@@ -3,11 +3,11 @@
 <suite parallel="none" name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test parallel="none" name="Default test(failed)">
     <classes>
-      <class name="UserApachePOITests">
+      <class name="userAPITest.UserApiGetTest">
         <methods>
-          <include name="testWithCorrectUserId" invocation-numbers="0 1"/>
+          <include name="testWithCorrectUserId"/>
         </methods>
-      </class> <!-- UserApachePOITests -->
+      </class> <!-- userAPITest.UserApiGetTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

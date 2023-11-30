@@ -1,6 +1,7 @@
 package core;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -35,14 +36,32 @@ public class QaHttpUtil {
 		// Add access token to headers
 		request.addHeader("Authorization", "Bearer " + accessToken);;
 		
-		request.setEntity(new UrlEncodedFormEntity(params));
-		//request.setEntity(entity);
+		// Check if params is not null or empty before setting the request entity
+	    if (params != null && !params.isEmpty()) {
+	        request.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
+	    }
 		
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpResponse response = client.execute(request);
 		return response;
 	}
 	
+	public static HttpResponse sendAndReceivePostMessage2(String url, String jsonBody, String accessToken) throws IOException, ClientProtocolException {
+	    HttpPost request = new HttpPost(url);
+
+	    // Add access token to headers
+	    request.addHeader("Authorization", "Bearer " + accessToken);
+	    request.addHeader("Content-Type", "application/json"); // Set the content type to JSON
+
+	    // Set the request entity as JSON
+	    StringEntity entity = new StringEntity(jsonBody);
+	    request.setEntity(entity);
+
+	    HttpClient client = HttpClientBuilder.create().build();
+	    HttpResponse response = client.execute(request);
+	    return response;
+	}
+
 	public static HttpResponse sendAndReceivePutMessage(String url, String message) throws IOException, ClientProtocolException {
 		HttpPut request = new HttpPut(url);
 		

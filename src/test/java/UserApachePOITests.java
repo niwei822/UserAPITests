@@ -70,7 +70,7 @@ public class UserApachePOITests extends BaseTest implements UserAPIConstants {
         try (Workbook workbook = new XSSFWorkbook(new FileInputStream(filePath))) {
             Sheet sheet = workbook.getSheet(sheetName);
 
-         // Find the table start cell (assuming there is no specific table name)
+         // Find the table start cell 
             int startRow = sheet.getFirstRowNum() + 1;
             int startCol = sheet.getRow(startRow).getFirstCellNum();
 
@@ -79,7 +79,7 @@ public class UserApachePOITests extends BaseTest implements UserAPIConstants {
             int endCol = sheet.getRow(startRow).getLastCellNum();
 
             System.out.println("startRow=" + startRow + ", endRow=" + endRow + ", " +
-                    "startCol=" + startCol + ", endCol=" + endCol);
+                   "startCol=" + startCol + ", endCol=" + endCol);
 
          // Read data into a 2D array
             tabArray = new String[endRow - startRow][endCol - startCol];
