@@ -62,8 +62,12 @@ public class QaHttpUtil {
 	    return response;
 	}
 
-	public static HttpResponse sendAndReceivePutMessage(String url, String message) throws IOException, ClientProtocolException {
+	public static HttpResponse sendAndReceivePutMessage(String url, String message, String accessToken) throws IOException, ClientProtocolException {
 		HttpPut request = new HttpPut(url);
+		
+		// Add access token to headers
+	    request.addHeader("Authorization", "Bearer " + accessToken);
+	    request.addHeader("Content-Type", "application/json"); // Set the content type to JSON
 		
 		StringEntity entity = new StringEntity(message);
 		request.setEntity(entity);

@@ -15,7 +15,7 @@ import core.QaHttpValidator;
 public class UserApiGetTest extends BaseTest implements UserAPIConstants {
 	@Test
     public void testWithCorrectUserId() throws ClientProtocolException, IOException {
-    	String url = base_URL + "/" + 5782407;
+    	String url = base_URL + "/" + 1700815;
     	System.out.println(url);
     	
     	HttpResponse response = QaHttpUtil.sendAndReceiveGetMessage(url);
@@ -29,6 +29,6 @@ public class UserApiGetTest extends BaseTest implements UserAPIConstants {
 		
 		//Assert.assertTrue(responseMsg.contains("12"));
 		//Assert.assertTrue(responseMsg.contains("Janet"));
-		Assert.assertEquals(user.getName(), "Anandamayi Panicker");
+		Assert.assertEquals(user.getName(), "Budhil Kaul JD");
     }
 }

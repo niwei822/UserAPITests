@@ -19,7 +19,7 @@ public class UserApiPostTest extends BaseTest implements UserAPIConstants {
 		// Create URI with base URL
 		String url = base_URL;
         
-		User newUser = JsonUtil.createUser("John Doe", "john.doe134567@example.com", "male", "active");
+		User newUser = JsonUtil.createUser("John Doe", "john.doe13425677@example.com", "male", "active");
 		String jsonStr = JsonUtil.getJsonString(newUser);
 		HttpResponse response = QaHttpUtil.sendAndReceivePostMessage2(url, jsonStr, ACCESS_TOKEN);
 		//System.out.println(ACCESS_TOKEN);
