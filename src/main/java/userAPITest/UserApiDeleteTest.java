@@ -2,51 +2,39 @@ package userAPITest;
 
 import java.io.IOException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-public class UserApiDeleteTest {
+import core.BaseTest;
+import core.QaHttpUtil;
+import core.QaHttpValidator;
 
-	public static void main(String[] args) {
-		// Create a CloseableHttpClient
-		try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+public class UserApiDeleteTest extends BaseTest implements UserAPIConstants {
 
-			// Define the URL of the DELETE request
-			String deleteUrl = "https://reqres.in/api/users/4";
+	@Test
+    public void testWithDeleteUser() throws ClientProtocolException, IOException {
+        
+    	String url = base_URL + "/" + 1700822;
+    	System.out.println(url);
+    	HttpResponse response = QaHttpUtil.sendAndReceiveGetMessage(url);
+		String responseMsg = QaHttpUtil.getStringMessageFromResponseObject(response);
+		System.out.println(responseMsg);
+		
+        HttpResponse res = QaHttpUtil.sendAndReceiveDeleteMessage(url, ACCESS_TOKEN);
+        // Validate the response
+        QaHttpValidator.performBasicHttpValidation(res, HTTP_CODE_204, HTTP_STATUS_MESSAGE_NO_CONTENT);
+        String resMsg = QaHttpUtil.getStringMessageFromResponseObject(res);
+        // Optionally, you can check the response body for specific details
+        
+        Assert.assertTrue(resMsg.contains(""));
 
-			// Create an HttpDelete object
-			HttpDelete httpDelete = new HttpDelete(deleteUrl);
+        System.out.println("User deleted successfully!");
+    }
 
-			// Execute the DELETE request
-			try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
-				// Get the response entity
-				HttpEntity entity = response.getEntity();
-				System.out.println(response.getStatusLine().getStatusCode());
-				System.out.println(response.getStatusLine().getReasonPhrase());
-
-				// Print the response content
-				if (entity != null) {
-					System.out.println(EntityUtils.toString(entity));
-				}
-				if (response.getStatusLine().getStatusCode() == 204) {
-					System.out.println("status code test passed");
-				} else {
-					System.out.println("status code test failed");
-				}
-				if ("No Content".equals(response.getStatusLine().getReasonPhrase())) {
-					System.out.println("status phrase test passed");
-				} else {
-					System.out.println("status phrase test failed");
-				}
-
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+ 
+    
 }
+
+

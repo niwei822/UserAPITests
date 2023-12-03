@@ -77,9 +77,12 @@ public class QaHttpUtil {
 		return response;
 	}
 	
-	public static HttpResponse sendAndReceiveDeleteMessage(String url) throws IOException, ClientProtocolException {
+	public static HttpResponse sendAndReceiveDeleteMessage(String url, String accessToken) throws IOException, ClientProtocolException {
 		HttpDelete request = new HttpDelete(url);
 		
+		// Add access token to headers
+	    request.addHeader("Authorization", "Bearer " + accessToken);
+	    request.addHeader("Content-Type", "application/json"); 
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpResponse response = client.execute(request);
 		return response;

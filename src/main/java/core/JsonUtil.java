@@ -1,6 +1,5 @@
 package core;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import userAPITest.User;
 
@@ -23,13 +22,4 @@ public class JsonUtil {
         User newUser = new User(0, name, email, gender, status);
         return newUser;
     }
-
-    public static String deleteUserJson(int userId) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", userId);
-        String jsonStr = jsonObject.toString();
-        System.out.println(jsonStr);
-        return jsonStr;
-    }
-
 }

@@ -14,6 +14,6 @@ public interface UserAPIConstants {
 	static final String HTTP_STATUS_CREATED = "Created";
 	static final String HTTP_STATUS_MESSAGE_CLIENT_DATA_ISSUE = "CLIENT DATA ISSUE";
 	static final String HTTP_STATUS_MESSAGE_NOT_FOUND = "Not Found";
-	static final String HTTP_STATUS_MESSAGE_NO_CONTENT = "No content";
+	static final String HTTP_STATUS_MESSAGE_NO_CONTENT = "No Content";
 
 }
